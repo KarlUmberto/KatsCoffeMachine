@@ -19,9 +19,25 @@ namespace KatsCoffeMachine.Controllers
             _context = context;
         }
 
-        // GET: Coffees
+        public IActionResult AddDrink()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddDrink([Bind("Id,Brand,CoffeeType,CupsInPackage")] Coffee coffee)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(coffee);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(coffee);
+        }
+
+        // GET: Coffees
         public async Task<IActionResult> Index()
         {
               return View(await _context.Coffee.ToListAsync());
