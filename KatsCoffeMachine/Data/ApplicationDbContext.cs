@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using KatsCoffeMachine.Models;
 
 namespace KatsCoffeMachine.Data
 {
@@ -9,5 +10,6 @@ namespace KatsCoffeMachine.Data
             : base(options)
         {
         }
+        public DbSet<KatsCoffeMachine.Models.Coffee> Coffee { get; set; }
     }
 }
