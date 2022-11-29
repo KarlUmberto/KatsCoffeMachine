@@ -10,94 +10,85 @@ using KatsCoffeMachine.Models;
 
 namespace KatsCoffeMachine.Controllers
 {
-    public class CoffeesController : Controller
+    public class CoffeeTypesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CoffeesController(ApplicationDbContext context)
+        public CoffeeTypesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Coffees
+        // GET: CoffeeTypes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Coffee.Include(c => c.Brand).Include(c => c.CoffeeType);
-            return View(await applicationDbContext.ToListAsync());
+              return View(await _context.CoffeeType.ToListAsync());
         }
 
-        // GET: Coffees/Details/5
+        // GET: CoffeeTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Coffee == null)
+            if (id == null || _context.CoffeeType == null)
             {
                 return NotFound();
             }
 
-            var coffee = await _context.Coffee
-                .Include(c => c.Brand)
-                .Include(c => c.CoffeeType)
+            var coffeeType = await _context.CoffeeType
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (coffee == null)
+            if (coffeeType == null)
             {
                 return NotFound();
             }
 
-            return View(coffee);
+            return View(coffeeType);
         }
 
-        // GET: Coffees/Create
+        // GET: CoffeeTypes/Create
         public IActionResult Create()
         {
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id");
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id");
             return View();
         }
 
-        // POST: Coffees/Create
+        // POST: CoffeeTypes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
+        public async Task<IActionResult> Create([Bind("Id,Name")] CoffeeType coffeeType)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(coffee);
+                _context.Add(coffeeType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id", coffee.CoffeeTypeId);
-            return View(coffee);
+            return View(coffeeType);
         }
 
-        // GET: Coffees/Edit/5
+        // GET: CoffeeTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Coffee == null)
+            if (id == null || _context.CoffeeType == null)
             {
                 return NotFound();
             }
 
-            var coffee = await _context.Coffee.FindAsync(id);
-            if (coffee == null)
+            var coffeeType = await _context.CoffeeType.FindAsync(id);
+            if (coffeeType == null)
             {
                 return NotFound();
             }
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id", coffee.CoffeeTypeId);
-            return View(coffee);
+            return View(coffeeType);
         }
 
-        // POST: Coffees/Edit/5
+        // POST: CoffeeTypes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] CoffeeType coffeeType)
         {
-            if (id != coffee.Id)
+            if (id != coffeeType.Id)
             {
                 return NotFound();
             }
@@ -106,12 +97,12 @@ namespace KatsCoffeMachine.Controllers
             {
                 try
                 {
-                    _context.Update(coffee);
+                    _context.Update(coffeeType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CoffeeExists(coffee.Id))
+                    if (!CoffeeTypeExists(coffeeType.Id))
                     {
                         return NotFound();
                     }
@@ -122,53 +113,49 @@ namespace KatsCoffeMachine.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id", coffee.CoffeeTypeId);
-            return View(coffee);
+            return View(coffeeType);
         }
 
-        // GET: Coffees/Delete/5
+        // GET: CoffeeTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Coffee == null)
+            if (id == null || _context.CoffeeType == null)
             {
                 return NotFound();
             }
 
-            var coffee = await _context.Coffee
-                .Include(c => c.Brand)
-                .Include(c => c.CoffeeType)
+            var coffeeType = await _context.CoffeeType
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (coffee == null)
+            if (coffeeType == null)
             {
                 return NotFound();
             }
 
-            return View(coffee);
+            return View(coffeeType);
         }
 
-        // POST: Coffees/Delete/5
+        // POST: CoffeeTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Coffee == null)
+            if (_context.CoffeeType == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Coffee'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.CoffeeType'  is null.");
             }
-            var coffee = await _context.Coffee.FindAsync(id);
-            if (coffee != null)
+            var coffeeType = await _context.CoffeeType.FindAsync(id);
+            if (coffeeType != null)
             {
-                _context.Coffee.Remove(coffee);
+                _context.CoffeeType.Remove(coffeeType);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CoffeeExists(int id)
+        private bool CoffeeTypeExists(int id)
         {
-          return _context.Coffee.Any(e => e.Id == id);
+          return _context.CoffeeType.Any(e => e.Id == id);
         }
     }
 }

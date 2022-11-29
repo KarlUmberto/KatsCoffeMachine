@@ -11,5 +11,7 @@ namespace KatsCoffeMachine.Data
         {
         }
         public DbSet<KatsCoffeMachine.Models.Coffee> Coffee { get; set; }
+        public DbSet<KatsCoffeMachine.Models.Brand> Brand { get; set; }
+        public DbSet<KatsCoffeMachine.Models.CoffeeType> CoffeeType { get; set; }
     }
 }
