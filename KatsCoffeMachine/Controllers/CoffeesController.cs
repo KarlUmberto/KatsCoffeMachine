@@ -46,6 +46,29 @@ namespace KatsCoffeMachine.Controllers
             return View(coffee);
         }
 
+        // AddDrink
+        public IActionResult AddDrink()
+        {
+            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id");
+            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddDrink([Bind("Id,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(coffee);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
+            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id", coffee.CoffeeTypeId);
+            return View(coffee);
+        }
+
         // GET: Coffees/Create
         public IActionResult Create()
         {
