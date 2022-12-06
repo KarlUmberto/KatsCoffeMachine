@@ -46,6 +46,7 @@ namespace KatsCoffeMachine.Controllers
         // GET: Brands/Create
         public IActionResult Create()
         {
+
             return View();
         }
 

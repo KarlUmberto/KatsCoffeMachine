@@ -58,6 +58,13 @@ namespace KatsCoffeMachine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddDrink([Bind("Id,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
         {
+            var coffeeType = await _context.CoffeeType.FirstOrDefaultAsync(m => m.Id == coffee.CoffeeTypeId);
+            coffee.CoffeeType = coffeeType;
+            ModelState.ClearValidationState(nameof(coffee.CoffeeType));
+            var brand= await _context.Brand.FirstOrDefaultAsync(m => m.Id == coffee.BrandId);
+            coffee.Brand = brand;
+            ModelState.ClearValidationState(nameof(coffee.Brand));
+            TryValidateModel(coffee);
             if (ModelState.IsValid)
             {
                 _context.Add(coffee);
