@@ -46,6 +46,18 @@ namespace KatsCoffeMachine.Controllers
         // GET: Brands/Create
         public IActionResult Create()
         {
+            
+            return View();
+        }
+
+        public IActionResult Brand()
+        {
+
+            return View();
+        }
+
+        public IActionResult CoffeeType()
+        {
 
             return View();
         }
