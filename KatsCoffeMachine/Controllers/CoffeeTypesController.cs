@@ -19,6 +19,12 @@ namespace KatsCoffeMachine.Controllers
             _context = context;
         }
 
+        public IActionResult CoffeeType()
+        {
+
+            return View();
+        }
+
         // GET: CoffeeTypes
         public async Task<IActionResult> Index()
         {

@@ -36,7 +36,7 @@ namespace KatsCoffeMachine.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brand");
+                    b.ToTable("Brand", (string)null);
                 });
 
             modelBuilder.Entity("KatsCoffeMachine.Models.Coffee", b =>
@@ -65,7 +65,7 @@ namespace KatsCoffeMachine.Data.Migrations
 
                     b.HasIndex("CoffeeTypeId");
 
-                    b.ToTable("Coffee");
+                    b.ToTable("Coffee", (string)null);
                 });
 
             modelBuilder.Entity("KatsCoffeMachine.Models.CoffeeType", b =>
@@ -82,7 +82,7 @@ namespace KatsCoffeMachine.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CoffeeType");
+                    b.ToTable("CoffeeType", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

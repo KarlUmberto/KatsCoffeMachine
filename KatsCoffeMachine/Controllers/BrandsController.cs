@@ -50,17 +50,27 @@ namespace KatsCoffeMachine.Controllers
             return View();
         }
 
-        public IActionResult Brand()
+
+        public IActionResult AddBrand()
         {
 
             return View();
         }
 
-        public IActionResult CoffeeType()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddBrand([Bind("Id,Name")] Brand brand)
         {
-
-            return View();
+            if (ModelState.IsValid)
+            {
+                _context.Add(brand);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(brand);
         }
+
+
 
         // POST: Brands/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
