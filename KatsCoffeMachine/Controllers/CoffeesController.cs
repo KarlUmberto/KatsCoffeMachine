@@ -49,8 +49,8 @@ namespace KatsCoffeMachine.Controllers
         // AddDrink
         public IActionResult AddDrink()
         {
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id");
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id");
+            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Name");
+            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Name");
             return View();
         }
 
