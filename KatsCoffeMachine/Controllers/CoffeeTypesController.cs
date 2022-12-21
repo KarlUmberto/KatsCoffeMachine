@@ -25,6 +25,19 @@ namespace KatsCoffeMachine.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCoffeeType([Bind("Id,Name")] CoffeeType coffeeType)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(coffeeType);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(coffeeType);
+        }
+
         // GET: CoffeeTypes
         public async Task<IActionResult> Index()
         {
