@@ -25,6 +25,12 @@ namespace KatsCoffeMachine.Controllers
               return View(await _context.Brand.ToListAsync());
         }
 
+        public async Task<IActionResult> Brands()
+        {
+            return View(await _context.Brand.ToListAsync());
+        }
+
+
         // GET: Brands/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -65,7 +71,7 @@ namespace KatsCoffeMachine.Controllers
             {
                 _context.Add(brand);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Brands));
             }
             return View(brand);
         }

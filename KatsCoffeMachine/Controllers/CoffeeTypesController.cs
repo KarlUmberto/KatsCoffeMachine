@@ -19,25 +19,6 @@ namespace KatsCoffeMachine.Controllers
             _context = context;
         }
 
-        public IActionResult CoffeeType()
-        {
-
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddCoffeeType([Bind("Id,Name")] CoffeeType coffeeType)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(coffeeType);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(coffeeType);
-        }
-
         // GET: CoffeeTypes
         public async Task<IActionResult> Index()
         {
@@ -59,6 +40,24 @@ namespace KatsCoffeMachine.Controllers
                 return NotFound();
             }
 
+            return View(coffeeType);
+        }
+
+        public IActionResult AddCoffeeType()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCoffeeType([Bind("Id,Name")] CoffeeType coffeeType)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(coffeeType);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
             return View(coffeeType);
         }
 
