@@ -71,7 +71,7 @@ namespace KatsCoffeMachine.Controllers
             {
                 _context.Add(brand);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Brands));
+                return RedirectToAction(nameof(Index));
             }
             return View(brand);
         }
