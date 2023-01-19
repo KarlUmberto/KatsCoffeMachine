@@ -20,6 +20,11 @@ namespace KatsCoffeMachine.Controllers
         }
 
         // GET: CoffeeTypes
+        public async Task<IActionResult> ShowCoffeeTypes()
+        {
+            return View(await _context.CoffeeType.ToListAsync());
+        }
+
         public async Task<IActionResult> Index()
         {
               return View(await _context.CoffeeType.ToListAsync());
@@ -56,7 +61,7 @@ namespace KatsCoffeMachine.Controllers
             {
                 _context.Add(coffeeType);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ShowCoffeeTypes));
             }
             return View(coffeeType);
         }

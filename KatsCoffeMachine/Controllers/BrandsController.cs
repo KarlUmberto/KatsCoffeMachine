@@ -20,6 +20,11 @@ namespace KatsCoffeMachine.Controllers
         }
 
         // GET: Brands
+        public async Task<IActionResult> ShowBrands()
+        {
+            return View(await _context.Brand.ToListAsync());
+        }
+
         public async Task<IActionResult> Index()
         {
               return View(await _context.Brand.ToListAsync());
@@ -71,7 +76,7 @@ namespace KatsCoffeMachine.Controllers
             {
                 _context.Add(brand);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ShowBrands));
             }
             return View(brand);
         }

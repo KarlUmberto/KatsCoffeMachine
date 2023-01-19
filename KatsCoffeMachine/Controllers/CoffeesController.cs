@@ -20,6 +20,12 @@ namespace KatsCoffeMachine.Controllers
         }
 
         // GET: Coffees
+        public async Task<IActionResult> Orders()
+        {
+            var applicationDbContext = _context.Coffee.Include(c => c.Brand).Include(c => c.CoffeeType);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Coffee.Include(c => c.Brand).Include(c => c.CoffeeType);
@@ -69,7 +75,7 @@ namespace KatsCoffeMachine.Controllers
             {
                 _context.Add(coffee);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Orders));
             }
             ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
             ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id", coffee.CoffeeTypeId);
