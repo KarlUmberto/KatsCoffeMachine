@@ -51,9 +51,21 @@ namespace KatsCoffeMachine.Controllers
 
             return View(coffee);
         }
+        // kontrollib, pakist võetud topse
+        //public async Task<IActionResult> PassFail(int Id, string Osa, int Tulemus)
+        //{
+        //    var eksam = await _context.Eksam.FindAsync(Id);
+        //    if (eksam == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    {
+        //        _context.Update(eksam);
+        //        await _context.SaveChangesAsync();
+        //    }
 
-        // AddDrink
-        public IActionResult AddDrink()
+            // AddDrink
+            public IActionResult AddDrink()
         {
             ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Name");
             ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Name");
@@ -121,8 +133,8 @@ namespace KatsCoffeMachine.Controllers
             {
                 return NotFound();
             }
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id", coffee.CoffeeTypeId);
+            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Name", coffee.BrandId);
+            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Name", coffee.CoffeeTypeId);
             return View(coffee);
         }
 
@@ -131,7 +143,7 @@ namespace KatsCoffeMachine.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Brand,BrandId,CoffeeType,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
         {
             if (id != coffee.Id)
             {
