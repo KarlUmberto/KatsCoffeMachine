@@ -14,6 +14,8 @@ namespace KatsCoffeMachine.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+
+
         public CoffeeTypesController(ApplicationDbContext context)
         {
             _context = context;
@@ -182,3 +184,4 @@ namespace KatsCoffeMachine.Controllers
         }
     }
 }
+

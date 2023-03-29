@@ -14,6 +14,31 @@ namespace KatsCoffeMachine.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        ////Dispenser
+        //private int CupsInPackage = 50;
+        //public IActionResult Dispenser()
+        //{
+        //    return View();
+        //}
+        //public OrderDrink()
+        //{
+        //    var applicationDbContext = _context
+        //                    .Coffee
+        //                    .Include(c => c.CoffeeType)
+        //                    .Where(r => r.Brand == Brand);
+
+        //    IQueryable<string> genreQuery = from m in _context.CoffeeType
+        //                                    orderby m.Coffees
+        //                                    select m.Brand;
+        //    var cargos = from m in _context.Coffee
+        //                 select m;
+
+        //    if (!string.IsNullOrEmpty(Brand))
+        //    {
+        //        cargos = cargos.Where(x => x.Brand == Brand);
+        //    }
+        //}
+
         public CoffeesController(ApplicationDbContext context)
         {
             _context = context;
