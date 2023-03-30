@@ -6,8 +6,40 @@
 
 <h1>Dispenser</h1>
 
-<p>
-    <a asp-action="OrderDrink">Order</a>
-</p>
-@*
-*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoffeeType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CoffeeType.Name)
+                </td>
+                <td>
+                    @if(item.CupsAvailable>0){
+                        <form method="post" asp-controller="Coffees" asp-action="Dispenser" asp-route-id="@item.Id">
+                            <button type="submit">Order</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>Out of service</p>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

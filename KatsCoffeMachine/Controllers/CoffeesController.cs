@@ -15,11 +15,73 @@ namespace KatsCoffeMachine.Controllers
         private readonly ApplicationDbContext _context;
 
         ////Dispenser
-        //private int CupsInPackage = 50;
-        //public IActionResult Dispenser()
-        //{
-        //    return View();
-        //}
+        private const int CupsInPackage = 50;
+        
+        /*
+         Naitab koffisi mida saab tellida, kui topse pole, siis ei naita v ytleb et ei saa tellida.. mingi out of service
+
+         */
+        public async Task<IActionResult> Dispenser()
+        {
+            var applicationDbContext = _context.Coffee.Include(c => c.Brand).Include(c => c.CoffeeType);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        /* 
+         Order method, vahendab topside arvu ja kui arv on 0 siis votab 1 package ara ja lisab tagasi 50
+         */
+        [HttpPost]
+        public async Task<IActionResult> Dispenser(int? id)
+        {
+            if (id == null || _context.Coffee == null)
+            {
+                return NotFound();
+            }
+
+            var coffee = await _context.Coffee
+                .Include(c => c.Brand)
+                .Include(c => c.CoffeeType)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (coffee == null)
+            {
+                return NotFound();
+            }
+
+            coffee.CupsAvailable--;
+
+            if(coffee.CupsAvailable <= 0 && coffee.CupsInPackage > 0)
+            {
+                coffee.CupsAvailable = CupsInPackage;
+                coffee.CupsInPackage -= 1;            
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("OrderComplete", new { id = id });
+
+        }
+
+        public async Task<IActionResult> OrderComplete(int? id)
+        {
+            if (id == null || _context.Coffee == null)
+            {
+                return NotFound();
+            }
+
+            var coffee = await _context.Coffee
+                .Include(c => c.Brand)
+                .Include(c => c.CoffeeType)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (coffee == null)
+            {
+                return NotFound();
+            }
+
+            return View(coffee);
+        }
+
+
+
+
         //public OrderDrink()
         //{
         //    var applicationDbContext = _context
@@ -106,6 +168,7 @@ namespace KatsCoffeMachine.Controllers
             ModelState.ClearValidationState(nameof(coffee.CoffeeType));
             var brand= await _context.Brand.FirstOrDefaultAsync(m => m.Id == coffee.BrandId);
             coffee.Brand = brand;
+            coffee.CupsAvailable = CupsInPackage;
             ModelState.ClearValidationState(nameof(coffee.Brand));
             TryValidateModel(coffee);
             if (ModelState.IsValid)

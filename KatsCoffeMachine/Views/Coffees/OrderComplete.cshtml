@@ -1,0 +1,14 @@
+﻿@model KatsCoffeMachine.Models.Coffee
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Order Complete</h1>
+
+<div>
+    <h4>You ordered a @Html.DisplayFor(model => model.Brand.Name) @Html.DisplayFor(model => model.CoffeeType.Name)!</h4>
+</div>
+<div>
+    <a asp-action="Dispenser">Back to Dispenser</a>
+</div>  
