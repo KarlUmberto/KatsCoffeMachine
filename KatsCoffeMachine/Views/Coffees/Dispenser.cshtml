@@ -15,9 +15,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.CoffeeType)
             </th>
-@*            <th>
+            <th>
                 @Html.DisplayNameFor(model => model.DisplayName)
-            </th>*@
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -30,6 +30,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CoffeeType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisplayName)
                 </td>
                 <td>
                     @if(item.CupsAvailable>0){

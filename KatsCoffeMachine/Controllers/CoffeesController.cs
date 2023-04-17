@@ -16,7 +16,12 @@ namespace KatsCoffeMachine.Controllers
 
         ////Dispenser
         private const int CupsInPackage = 50;
-        
+
+        public CoffeesController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         /*
          Naitab koffisi mida saab tellida, kui topse pole, siis ei naita v ytleb et ei saa tellida.. mingi out of service
 
@@ -101,11 +106,6 @@ namespace KatsCoffeMachine.Controllers
         //    }
         //}
 
-        public CoffeesController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         // GET: Coffees
         public async Task<IActionResult> Orders()
         {
@@ -113,6 +113,38 @@ namespace KatsCoffeMachine.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public IActionResult AddDrink()
+        {
+            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Name");
+            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddDrink([Bind("Id,DisplayName,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
+        {
+            var coffeeType = await _context.CoffeeType.FirstOrDefaultAsync(m => m.Id == coffee.CoffeeTypeId);
+            coffee.CoffeeType = coffeeType;
+            ModelState.ClearValidationState(nameof(coffee.CoffeeType));
+            var brand = await _context.Brand.FirstOrDefaultAsync(m => m.Id == coffee.BrandId);
+            coffee.Brand = brand;
+            coffee.CupsAvailable = CupsInPackage;
+            ModelState.ClearValidationState(nameof(coffee.Brand));
+            TryValidateModel(coffee);
+            if (ModelState.IsValid)
+            {
+                _context.Add(coffee);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Orders));
+            }
+            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
+            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id", coffee.CoffeeTypeId);
+            return View(coffee);
+        }
+
+
+        // GET: Coffees
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Coffee.Include(c => c.Brand).Include(c => c.CoffeeType);
@@ -138,55 +170,12 @@ namespace KatsCoffeMachine.Controllers
 
             return View(coffee);
         }
-        // kontrollib, pakist võetud topse
-        //public async Task<IActionResult> PassFail(int Id, string Osa, int Tulemus)
-        //{
-        //    var eksam = await _context.Eksam.FindAsync(Id);
-        //    if (eksam == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    {
-        //        _context.Update(eksam);
-        //        await _context.SaveChangesAsync();
-        //    }
-
-            // AddDrink
-            public IActionResult AddDrink()
-        {
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Name");
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Name");
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddDrink([Bind("Id,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
-        {
-            var coffeeType = await _context.CoffeeType.FirstOrDefaultAsync(m => m.Id == coffee.CoffeeTypeId);
-            coffee.CoffeeType = coffeeType;
-            ModelState.ClearValidationState(nameof(coffee.CoffeeType));
-            var brand= await _context.Brand.FirstOrDefaultAsync(m => m.Id == coffee.BrandId);
-            coffee.Brand = brand;
-            coffee.CupsAvailable = CupsInPackage;
-            ModelState.ClearValidationState(nameof(coffee.Brand));
-            TryValidateModel(coffee);
-            if (ModelState.IsValid)
-            {
-                _context.Add(coffee);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Orders));
-            }
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id", coffee.CoffeeTypeId);
-            return View(coffee);
-        }
 
         // GET: Coffees/Create
         public IActionResult Create()
         {
             ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id");
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id");
+            ViewData["CoffeeTypeId"] = new SelectList(_context.CoffeeType, "Id", "Id");
             return View();
         }
 
@@ -195,7 +184,7 @@ namespace KatsCoffeMachine.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
+        public async Task<IActionResult> Create([Bind("Id,DisplayName,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
         {
             if (ModelState.IsValid)
             {
@@ -204,7 +193,7 @@ namespace KatsCoffeMachine.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id", coffee.CoffeeTypeId);
+            ViewData["CoffeeTypeId"] = new SelectList(_context.CoffeeType, "Id", "Id", coffee.CoffeeTypeId);
             return View(coffee);
         }
 
@@ -221,8 +210,8 @@ namespace KatsCoffeMachine.Controllers
             {
                 return NotFound();
             }
-            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Name", coffee.BrandId);
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Name", coffee.CoffeeTypeId);
+            ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
+            ViewData["CoffeeTypeId"] = new SelectList(_context.CoffeeType, "Id", "Id", coffee.CoffeeTypeId);
             return View(coffee);
         }
 
@@ -231,7 +220,7 @@ namespace KatsCoffeMachine.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Brand,BrandId,CoffeeType,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DisplayName,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
         {
             if (id != coffee.Id)
             {
@@ -259,7 +248,7 @@ namespace KatsCoffeMachine.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BrandId"] = new SelectList(_context.Brand, "Id", "Id", coffee.BrandId);
-            ViewData["CoffeeTypeId"] = new SelectList(_context.Set<CoffeeType>(), "Id", "Id", coffee.CoffeeTypeId);
+            ViewData["CoffeeTypeId"] = new SelectList(_context.CoffeeType, "Id", "Id", coffee.CoffeeTypeId);
             return View(coffee);
         }
 
@@ -297,14 +286,14 @@ namespace KatsCoffeMachine.Controllers
             {
                 _context.Coffee.Remove(coffee);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CoffeeExists(int id)
         {
-          return _context.Coffee.Any(e => e.Id == id);
+            return (_context.Coffee?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

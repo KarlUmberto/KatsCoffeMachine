@@ -7,6 +7,7 @@ namespace KatsCoffeMachine.Models
     {
         //1, Paulig, cappuccino, 200, 400
         public int Id { get; set; }
+        public string DisplayName { get; set; }
         public Brand Brand { get; set; }
         [Display(Name = "Brand")]
         public int BrandId { get; set; }

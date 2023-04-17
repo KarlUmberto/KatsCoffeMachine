@@ -19,12 +19,14 @@
                 @Html.DisplayNameFor(model => model.CoffeeType)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.DisplayName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.CupsAvailable)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CupsInPackage)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -38,14 +40,13 @@
                     @Html.DisplayFor(modelItem => item.CoffeeType.Name)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.DisplayName)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.CupsAvailable)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CupsInPackage)
-                </td>
-                <td>
-                    <a asp-action="" asp-route-id="@item.Id">Order</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                 </td>
             </tr>
         }
