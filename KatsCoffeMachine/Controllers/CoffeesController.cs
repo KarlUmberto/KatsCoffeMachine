@@ -14,9 +14,6 @@ namespace KatsCoffeMachine.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        ////Dispenser
-        private const int CupsInPackage = 50;
-
         public CoffeesController(ApplicationDbContext context)
         {
             _context = context;
@@ -53,12 +50,6 @@ namespace KatsCoffeMachine.Controllers
             }
 
             coffee.CupsAvailable--;
-
-            if(coffee.CupsAvailable <= 0 && coffee.CupsInPackage > 0)
-            {
-                coffee.CupsAvailable = CupsInPackage;
-                coffee.CupsInPackage -= 1;            
-            }
 
             await _context.SaveChangesAsync();
             return RedirectToAction("OrderComplete", new { id = id });
@@ -129,7 +120,7 @@ namespace KatsCoffeMachine.Controllers
             ModelState.ClearValidationState(nameof(coffee.CoffeeType));
             var brand = await _context.Brand.FirstOrDefaultAsync(m => m.Id == coffee.BrandId);
             coffee.Brand = brand;
-            coffee.CupsAvailable = CupsInPackage;
+            coffee.CupsAvailable = 0;
             ModelState.ClearValidationState(nameof(coffee.Brand));
             TryValidateModel(coffee);
             if (ModelState.IsValid)
