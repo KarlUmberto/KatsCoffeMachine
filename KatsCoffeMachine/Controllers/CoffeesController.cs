@@ -54,10 +54,10 @@ namespace KatsCoffeMachine.Controllers
 
             coffee.CupsAvailable--;
 
-            if(coffee.CupsAvailable <= 0 && coffee.CupPackages > 0)
+            if(coffee.CupsAvailable <= 0 && coffee.CupsInPackage > 0)
             {
                 coffee.CupsAvailable = CupsInPackage;
-                coffee.CupPackages -= 1;            
+                coffee.CupsInPackage -= 1;            
             }
 
             await _context.SaveChangesAsync();
@@ -122,7 +122,7 @@ namespace KatsCoffeMachine.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddDrink([Bind("Id,DisplayName,BrandId,CoffeeTypeId,CupsAvailable,CupPackages")] Coffee coffee)
+        public async Task<IActionResult> AddDrink([Bind("Id,DisplayName,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
         {
             var coffeeType = await _context.CoffeeType.FirstOrDefaultAsync(m => m.Id == coffee.CoffeeTypeId);
             coffee.CoffeeType = coffeeType;
@@ -184,7 +184,7 @@ namespace KatsCoffeMachine.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DisplayName,BrandId,CoffeeTypeId,CupsAvailable,CupPackages")] Coffee coffee)
+        public async Task<IActionResult> Create([Bind("Id,DisplayName,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
         {
             if (ModelState.IsValid)
             {
@@ -220,7 +220,7 @@ namespace KatsCoffeMachine.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DisplayName,BrandId,CoffeeTypeId,CupsAvailable,CupPackages")] Coffee coffee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DisplayName,BrandId,CoffeeTypeId,CupsAvailable,CupsInPackage")] Coffee coffee)
         {
             if (id != coffee.Id)
             {

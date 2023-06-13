@@ -17,7 +17,7 @@ namespace KatsCoffeMachine.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.15")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -53,10 +53,10 @@ namespace KatsCoffeMachine.Data.Migrations
                     b.Property<int>("CoffeeTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CupPackages")
+                    b.Property<int>("CupsAvailable")
                         .HasColumnType("int");
 
-                    b.Property<int>("CupsAvailable")
+                    b.Property<int>("CupsInPackage")
                         .HasColumnType("int");
 
                     b.Property<string>("DisplayName")

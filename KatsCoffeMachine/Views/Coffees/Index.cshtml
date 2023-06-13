@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.CupsAvailable)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CupPackages)
+                @Html.DisplayNameFor(model => model.CupsInPackage)
             </th>
             <th></th>
         </tr>
@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.CupsAvailable)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.CupPackages)
+                @Html.DisplayFor(modelItem => item.CupsInPackage)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
