@@ -15,7 +15,7 @@ namespace KatsCoffeMachine.Models
         [Display(Name = "Coffee type")]
         public int CoffeeTypeId { get; set; }
         public int CupsAvailable { get; set; }
-        [Display(Name = "Cups in package")]
-        public int CupsInPackage { get; set; }
+        [Display(Name = "Cup Packages")]
+        public int CupPackages { get; set; }
     }
 }
