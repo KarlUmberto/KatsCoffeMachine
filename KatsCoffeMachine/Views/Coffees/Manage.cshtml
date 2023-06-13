@@ -1,0 +1,58 @@
+﻿@model IEnumerable<KatsCoffeMachine.Models.Coffee>
+
+@{
+    ViewData["Title"] = "Manage";
+}
+
+<h1>Manage</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DisplayName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoffeeType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CupsAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CupsInPackage)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisplayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CoffeeType.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CupsAvailable)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CupsInPackage)
+                </td>
+                <td>
+                    <form method="post" asp-controller="Coffees" asp-action="Manage" asp-route-id="@item.Id">
+                        <button type="submit">Refill Cups</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

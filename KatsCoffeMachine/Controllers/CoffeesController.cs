@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KatsCoffeMachine.Data;
 using KatsCoffeMachine.Models;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
 
 namespace KatsCoffeMachine.Controllers
 {
@@ -23,15 +24,44 @@ namespace KatsCoffeMachine.Controllers
          Naitab koffisi mida saab tellida, kui topse pole, siis ei naita v ytleb et ei saa tellida.. mingi out of service
 
          */
+
+        public async Task<IActionResult> Manage()
+        {
+            var applicationDbContext = _context.Coffee.Include(c => c.Brand).Include(c => c.CoffeeType);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Manage(int? id)
+        {
+            if (id == null || _context.Coffee == null)
+            {
+                return NotFound();
+            }
+
+            var coffee = await _context.Coffee
+                .Include(c => c.Brand)
+                .Include(c => c.CoffeeType)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (coffee == null)
+            {
+                return NotFound();
+            }
+
+            //refill cups
+            coffee.CupsAvailable = coffee.CupsInPackage;
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Manage");
+        }
+
         public async Task<IActionResult> Dispenser()
         {
             var applicationDbContext = _context.Coffee.Include(c => c.Brand).Include(c => c.CoffeeType);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        /* 
-         Order method, vahendab topside arvu ja kui arv on 0 siis votab 1 package ara ja lisab tagasi 50
-         */
+
         [HttpPost]
         public async Task<IActionResult> Dispenser(int? id)
         {
@@ -53,7 +83,6 @@ namespace KatsCoffeMachine.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction("OrderComplete", new { id = id });
-
         }
 
         public async Task<IActionResult> OrderComplete(int? id)
